@@ -1,7 +1,4 @@
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://pixel-perfect-replica-6169.lovable.app
 # 📄 IntelliDoc AI
 
 **IntelliDoc AI** is a **RAG-based document intelligence platform** that allows users to upload documents and ask questions in natural language.
@@ -50,5 +47,9 @@ When a user asks a question, IntelliDoc AI retrieves the most relevant document 
 * Vector Database
 * Document Processing
 * AI/ML
+
+This project was built with [Lovable](https://lovable.dev).
+
+**Live app**: https://pixel-perfect-replica-6169.lovable.app
 
 >
