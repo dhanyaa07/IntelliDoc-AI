@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { rrfFuse, stripInvalidCitations, validateCitations } from "./fusion";
+import { annotateCitations, rrfFuse, stripInvalidCitations, validateCitations } from "./fusion";
 
 const h = (id: string) => ({ id, document_id: "d", page: 1, content: id, score: 0 });
 
@@ -22,5 +22,10 @@ describe("citations", () => {
   });
   it("strips invalid citations", () => {
     expect(stripInvalidCitations("a [1] b [9]", 2)).toBe("a [1] b ");
+  });
+  it("shows the PDF page beside each cited claim and removes unknown citations", () => {
+    expect(annotateCitations("First [1]. Second [2][1]. Unsupported [9].", [
+      { n: 1, page: 12 }, { n: 2, page: 3 },
+    ])).toBe("First [1, p. 12]. Second [2, p. 3][1, p. 12]. Unsupported .");
   });
 });
