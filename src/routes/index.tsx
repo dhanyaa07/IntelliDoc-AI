@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ingestPdf } from "@/lib/ingest/ingest.client";
 import { embedPendingChunks } from "@/lib/rag/embed.functions";
 import { ChatPanel } from "@/components/ChatPanel";
 
@@ -45,6 +44,7 @@ function Index() {
 
   async function handleFiles(files: FileList | null) {
     if (!files?.length) return;
+    const { ingestPdf } = await import("@/lib/ingest/ingest.client");
     for (const f of Array.from(files)) {
       setBusy(`Reading ${f.name}…`);
       try {
