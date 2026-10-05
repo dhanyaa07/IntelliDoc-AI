@@ -100,7 +100,7 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
                 <details className="rounded-md border border-border bg-card">
                   <summary className="cursor-pointer px-3 py-2 font-mono text-xs text-muted-foreground">
                     Why this answer · {r.passages.length} passages
-                    {latency[m.id] ? ` · ${(latency[m.id] / 1000).toFixed(1)}s` : ""} · retrieval {r.timings.retrieveMs}ms
+                    {latency[m.id] ? ` · ${((latency[m.id] ?? 0) / 1000).toFixed(1)}s` : ""} · retrieval {r.timings.retrieveMs}ms
                   </summary>
                   <div className="space-y-3 border-t border-border p-3">
                     {r.query !== textOf(messages[messages.indexOf(m) - 1] ?? m) && (
