@@ -43,7 +43,7 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
   useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
   useEffect(() => {
     if (status === "ready" && messages.length) {
-      const last = messages[messages.length - 1];
+      const last = messages[messages.length - 1]!;
       if (last.role === "assistant" && !latency[last.id]) setLatency((l) => ({ ...l, [last.id]: Date.now() - started.current }));
       ta.current?.focus();
     }

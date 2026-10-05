@@ -6,9 +6,10 @@ const h = (id: string) => ({ id, document_id: "d", page: 1, content: id, score: 
 describe("RRF fusion", () => {
   it("uses k=60 and sums ranks across lists", () => {
     const out = rrfFuse([h("a"), h("b")], [h("b"), h("c")]);
-    expect(out[0].id).toBe("b");
-    expect(out[0].rrf).toBeCloseTo(1 / 62 + 1 / 61);
-    expect(out[0].sources).toEqual(["dense", "keyword"]);
+    const top = out[0]!;
+    expect(top.id).toBe("b");
+    expect(top.rrf).toBeCloseTo(1 / 62 + 1 / 61);
+    expect(top.sources).toEqual(["dense", "keyword"]);
   });
   it("keeps items from one list only", () => {
     expect(rrfFuse([h("a")], []).map((x) => x.id)).toEqual(["a"]);

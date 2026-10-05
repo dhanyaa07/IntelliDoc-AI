@@ -5,7 +5,7 @@ export const CHAT_MODEL = "openai/gpt-6-astra";
 export const EMBED_MODEL = "google/gemini-embedding-2";
 
 export function apiKey(): string {
-  const k = process.env.LOVABLE_API_KEY;
+  const k = process.env['LOVABLE_API_KEY'];
   if (!k) throw new Error("AI is not configured (missing key).");
   return k;
 }

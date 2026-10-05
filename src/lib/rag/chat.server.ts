@@ -28,7 +28,7 @@ function textOf(m: UIMessage): string {
 
 /** Rewrite a follow-up into a standalone search query using recent history. */
 async function rewriteQuery(messages: UIMessage[], signal: AbortSignal): Promise<string> {
-  const last = textOf(messages[messages.length - 1]);
+  const last = textOf(messages[messages.length - 1]!);
   const history = messages.slice(-7, -1);
   if (!history.length) return last;
   const convo = history.map((m) => `${m.role}: ${textOf(m).slice(0, 600)}`).join("\n");
