@@ -26,8 +26,9 @@ describe("chunking", () => {
   });
 
   it("removes repeated headers", () => {
-    const pages = [1, 2, 3, 4].map((n) => ({ page: n, text: `ACME Report\nbody ${n}` }));
+    const bodies = ["gearbox wear", "rotor speed", "blade pitch", "yaw control"];
+    const pages = bodies.map((b, i) => ({ page: i + 1, text: `ACME Report\n${b}` }));
     const rep = findRepeatedLines(pages);
-    expect(cleanPageText(pages[0].text, rep)).toBe("body 1");
+    expect(cleanPageText(pages[0].text, rep)).toBe("gearbox wear");
   });
 });
