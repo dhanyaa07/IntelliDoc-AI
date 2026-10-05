@@ -99,6 +99,8 @@ export async function handleChat(request: Request): Promise<Response> {
             `Rules:\n` +
             `- Use ONLY facts stated in the passages. Never add outside knowledge, assumptions, or guesses.\n` +
             `- Every factual sentence must end with its citation(s) like [1] or [2][3], using only passage numbers that exist (1-${passages.length}).\n` +
+            `- If one passage directly addresses the question (e.g. a heading or table on that exact topic, such as "Difference between X and Y"), answer from THAT passage, reproducing its points/table rows faithfully. Do not build your own answer by combining other passages when a direct one exists.\n` +
+            `- Only combine several passages when no single passage covers the question; never invent comparisons the text doesn't state.\n` +
             `- Copy numbers, units, names and part codes exactly as written.\n` +
             `- If the passages answer only part of the question, answer that part and say clearly what is not covered.\n` +
             `- If the passages don't contain the answer at all, reply exactly: "${NOT_FOUND}"\n` +
