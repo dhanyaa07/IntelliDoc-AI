@@ -59,7 +59,7 @@ export function splitText(text: string, size = CHUNK_SIZE, overlap = CHUNK_OVERL
 function recurse(text: string, seps: string[], size: number, overlap: number): string[] {
   if (text.length <= size) return text.trim() ? [text] : [];
   const sepIdx = seps.findIndex((s) => s === "" || text.includes(s));
-  const sep = seps[sepIdx];
+  const sep = seps[sepIdx]!;
   const rest = seps.slice(sepIdx + 1);
   const parts = sep === "" ? text.split("") : text.split(sep);
   const pieces: string[] = [];
@@ -79,7 +79,7 @@ function merge(pieces: string[], sep: string, size: number, overlap: number): st
     if (len + add > size && cur.length) {
       out.push(cur.join(sep));
       while (cur.length && (len > overlap || len + p.length + sep.length > size)) {
-        len -= cur[0].length + (cur.length > 1 ? sep.length : 0);
+        len -= cur[0]!.length + (cur.length > 1 ? sep.length : 0);
         cur.shift();
       }
     }

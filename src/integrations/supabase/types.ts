@@ -99,7 +99,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_chunks_dense: {
+        Args: {
+          doc_ids: string[]
+          match_count: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          page: number
+          score: number
+        }[]
+      }
+      match_chunks_text: {
+        Args: { doc_ids: string[]; match_count: number; query_text: string }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          page: number
+          score: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

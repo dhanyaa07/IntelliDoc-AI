@@ -11,7 +11,7 @@ describe("chunking", () => {
 
   it("overlaps consecutive chunks", () => {
     const text = Array.from({ length: 300 }, (_, i) => `w${i}`).join(" ");
-    const [a, b] = splitText(text, 800, 150);
+    const [a, b] = splitText(text, 800, 150) as [string, string];
     const tail = a.slice(-50);
     expect(b.includes(tail.split(" ").slice(-2).join(" "))).toBe(true);
   });
@@ -29,6 +29,6 @@ describe("chunking", () => {
     const bodies = ["gearbox wear", "rotor speed", "blade pitch", "yaw control"];
     const pages = bodies.map((b, i) => ({ page: i + 1, text: `ACME Report\n${b}` }));
     const rep = findRepeatedLines(pages);
-    expect(cleanPageText(pages[0].text, rep)).toBe("gearbox wear");
+    expect(cleanPageText(pages[0]!.text, rep)).toBe("gearbox wear");
   });
 });
