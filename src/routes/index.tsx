@@ -44,7 +44,7 @@ function Index() {
 
   async function handleFiles(files: FileList | null) {
     if (!files?.length) return;
-    const { ingestPdf } = await import("@/lib/ingest/ingest.client");
+    const { ingestPdf } = await import("@/lib/ingest/ingest.browser");
     for (const f of Array.from(files)) {
       setBusy(`Reading ${f.name}…`);
       try {
