@@ -14,7 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chunks: {
+        Row: {
+          char_end: number
+          char_start: number
+          chunk_index: number
+          content: string
+          content_hash: string
+          created_at: string
+          document_id: string
+          embedding: string | null
+          id: string
+          page: number
+          tsv: unknown
+        }
+        Insert: {
+          char_end: number
+          char_start: number
+          chunk_index: number
+          content: string
+          content_hash: string
+          created_at?: string
+          document_id: string
+          embedding?: string | null
+          id?: string
+          page: number
+          tsv?: unknown
+        }
+        Update: {
+          char_end?: number
+          char_start?: number
+          chunk_index?: number
+          content?: string
+          content_hash?: string
+          created_at?: string
+          document_id?: string
+          embedding?: string | null
+          id?: string
+          page?: number
+          tsv?: unknown
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          chunk_count: number
+          created_at: string
+          file_hash: string
+          id: string
+          low_text_pages: number[]
+          name: string
+          page_count: number
+        }
+        Insert: {
+          chunk_count?: number
+          created_at?: string
+          file_hash: string
+          id?: string
+          low_text_pages?: number[]
+          name: string
+          page_count?: number
+        }
+        Update: {
+          chunk_count?: number
+          created_at?: string
+          file_hash?: string
+          id?: string
+          low_text_pages?: number[]
+          name?: string
+          page_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
