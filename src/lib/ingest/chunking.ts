@@ -35,9 +35,11 @@ function normalizeLine(l: string): string {
 
 /** Remove headers/footers, bare page numbers, and join hyphenated line breaks. */
 export function cleanPageText(text: string, repeated: Set<string> = new Set()): string {
-  const lines = text
-    .split("\n")
-    .filter((l) => !repeated.has(normalizeLine(l)))
+  const all = text.split("\n");
+  const n = all.length;
+  // Only strip repeated lines at the top/bottom edges, never body text.
+  const lines = all
+    .filter((l, i) => !((i < 2 || i >= n - 2) && repeated.has(normalizeLine(l))))
     .filter((l) => !/^\s*(page\s*)?\d{1,4}(\s*(of|\/)\s*\d{1,4})?\s*$/i.test(l));
   return lines
     .join("\n")
