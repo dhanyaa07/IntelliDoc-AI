@@ -1,6 +1,6 @@
 import { createUIMessageStream, createUIMessageStreamResponse, streamText, convertToModelMessages, type UIMessage } from "ai";
 import { z } from "zod";
-import { rrfFuse, NOT_FOUND, type Hit } from "./fusion";
+import { rrfFuse, NOT_FOUND, validateCitations, type Hit } from "./fusion";
 import { CHAT_MODEL, embed, GatewayError, LOW_REASONING, responsesProvider } from "./gateway.server";
 
 const Body = z.object({
@@ -96,13 +96,22 @@ export async function handleChat(request: Request): Promise<Response> {
           model: responsesProvider().responses(CHAT_MODEL),
           system:
             `You answer questions about technical documents using ONLY the numbered context passages below.\n` +
-            `Rules:\n- Every factual sentence must cite its passage(s) like [1] or [2][3].\n- Never use outside knowledge.\n` +
-            `- If the passages don't contain the answer, reply exactly: "${NOT_FOUND}"\n- Be concise; use markdown lists/tables when helpful.\n\nContext:\n${context}`,
+            `Rules:\n` +
+            `- Use ONLY facts stated in the passages. Never add outside knowledge, assumptions, or guesses.\n` +
+            `- Every factual sentence must end with its citation(s) like [1] or [2][3], using only passage numbers that exist (1-${passages.length}).\n` +
+            `- Copy numbers, units, names and part codes exactly as written.\n` +
+            `- If the passages answer only part of the question, answer that part and say clearly what is not covered.\n` +
+            `- If the passages don't contain the answer at all, reply exactly: "${NOT_FOUND}"\n` +
+            `- If passages disagree, show each value with its citation instead of choosing one.\n` +
+            `- Be concise; use markdown lists/tables when helpful.\n\nContext:\n${context}`,
           messages: await convertToModelMessages(messages.slice(-6)),
           abortSignal: request.signal,
           providerOptions: LOW_REASONING,
         });
         writer.merge(result.toUIMessageStream({ sendReasoning: false }));
+        // Post-check: every [n] must map to a real passage.
+        const answer = await result.text;
+        writer.write({ type: "data-check", data: validateCitations(answer, passages.length) });
       },
       onError: (e) => (e instanceof Error ? e.message : "Something went wrong"),
     });

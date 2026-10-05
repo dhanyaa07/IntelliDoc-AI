@@ -38,7 +38,7 @@ function Index() {
   const [busy, setBusy] = useState<string | null>(null);
   const [log, setLog] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [topK, setTopK] = useState(6);
+  const [topK, setTopK] = useState(8);
   const [dense, setDense] = useState(true);
   const [keyword, setKeyword] = useState(true);
 
@@ -136,7 +136,7 @@ function Index() {
             <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Retrieval</h3>
             <div>
               <div className="mb-2 flex justify-between text-sm"><span>Passages (top-k)</span><span className="font-mono">{topK}</span></div>
-              <Slider min={1} max={15} step={1} value={[topK]} onValueChange={([v]) => setTopK(v ?? 6)} />
+              <Slider min={1} max={15} step={1} value={[topK]} onValueChange={([v]) => setTopK(v ?? 8)} />
             </div>
             <label className="flex items-center justify-between text-sm">Semantic search <Switch checked={dense} onCheckedChange={(v) => (v || keyword) && setDense(v)} /></label>
             <label className="flex items-center justify-between text-sm">Keyword search <Switch checked={keyword} onCheckedChange={(v) => (v || dense) && setKeyword(v)} /></label>

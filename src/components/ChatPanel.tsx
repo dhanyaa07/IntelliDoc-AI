@@ -88,7 +88,9 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
         )}
         {messages.map((m) => {
           const r = getRetrieval(m);
-          const text = textOf(m);
+          const check = (m.parts.find((x) => x.type === "data-check") as { data: { valid: number[]; invalid: number[] } } | undefined)?.data;
+          const raw = textOf(m);
+          const text = r ? raw.replace(/\[(\d+)\]/g, (s, n) => (Number(n) >= 1 && Number(n) <= r.passages.length ? s : "")) : raw;
           if (m.role === "user")
             return <div key={m.id} className="ml-auto max-w-[80%] rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">{text}</div>;
           return (
@@ -96,6 +98,9 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
               <div className="prose prose-sm max-w-none text-sm leading-relaxed text-foreground [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5">
                 {text ? <ReactMarkdown>{text}</ReactMarkdown> : <span className="animate-pulse text-muted-foreground">Searching documents…</span>}
               </div>
+              {check && check.invalid.length > 0 && (
+                <p className="font-mono text-xs text-warning">Removed {check.invalid.length} citation(s) that didn't match a source.</p>
+              )}
               {r && r.passages.length > 0 && (
                 <details className="rounded-md border border-border bg-card">
                   <summary className="cursor-pointer px-3 py-2 font-mono text-xs text-muted-foreground">
