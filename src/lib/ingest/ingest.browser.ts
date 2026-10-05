@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { chunkPages, cleanPageText, findRepeatedLines, LOW_TEXT_THRESHOLD, sha256 } from "./chunking";
-import { extractPdfPages } from "./pdf.browser";
+import { extractPdfPages, renderPageImage } from "./pdf.browser";
 
 export type IngestResult =
   | { status: "duplicate"; name: string }
@@ -16,6 +16,20 @@ export async function ingestPdf(file: File): Promise<IngestResult> {
   const raw = await extractPdfPages(buf);
   const repeated = findRepeatedLines(raw);
   const pages = raw.map((p) => ({ page: p.page, text: cleanPageText(p.text, repeated) }));
+  // Pages with pictures (tables/figures saved as images) or almost no text: read the page image.
+  const { readPageImage } = await import("./vision.functions");
+  const visual = raw.filter((p, i) => p.hasImages || pages[i]!.text.length < LOW_TEXT_THRESHOLD);
+  for (let i = 0; i < visual.length; i += 3) {
+    await Promise.all(visual.slice(i, i + 3).map(async (v) => {
+      try {
+        const image = await renderPageImage(buf, v.page);
+        const { text } = await readPageImage({ data: { image } });
+        const pg = pages[v.page - 1]!;
+        if (text.length > pg.text.length * 0.5) pg.text = text; // transcription includes the page's text + tables
+        else if (text) pg.text = `${pg.text}\n\n${text}`;
+      } catch (e) { console.warn(`Could not read image on page ${v.page}`, e); }
+    }));
+  }
   const lowTextPages = pages.filter((p) => p.text.length < LOW_TEXT_THRESHOLD).map((p) => p.page);
   const chunks = chunkPages(pages);
 
