@@ -49,3 +49,13 @@ export function validateCitations(answer: string, passageCount: number) {
 export function stripInvalidCitations(answer: string, passageCount: number): string {
   return answer.replace(/\[(\d+)\]/g, (m, n) => (Number(n) >= 1 && Number(n) <= passageCount ? m : ""));
 }
+
+/** Expand model citation numbers with the page stored for each retrieved passage. */
+export function annotateCitations(answer: string, passages: { n: number; page: number }[]): string {
+  const pages = new Map(passages.map((passage) => [passage.n, passage.page]));
+  return answer.replace(/\[(\d+)\]/g, (_, number: string) => {
+    const n = Number(number);
+    const page = pages.get(n);
+    return page === undefined ? "" : `[${n}, p. ${page}]`;
+  });
+}

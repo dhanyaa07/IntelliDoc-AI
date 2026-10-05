@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Send, Square, Trash2, Download, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { annotateCitations } from "@/lib/rag/fusion";
 interface SourcePassage { n: number; docName: string; page: number; content: string; sources: ("dense" | "keyword")[]; confidence: number }
 
 export interface ChatSettings {
@@ -60,7 +61,7 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
   function exportMd() {
     const md = messages.map((m) => {
       const r = getRetrieval(m);
-      let s = `### ${m.role === "user" ? "Question" : "Answer"}\n\n${textOf(m)}\n`;
+      let s = `### ${m.role === "user" ? "Question" : "Answer"}\n\n${r ? annotateCitations(textOf(m), r.passages) : textOf(m)}\n`;
       if (r?.passages.length) s += "\n**Sources**\n" + r.passages.map((p) => `- [${p.n}] ${p.docName}, p. ${p.page}`).join("\n") + "\n";
       return s;
     }).join("\n");
@@ -90,7 +91,7 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
           const r = getRetrieval(m);
           const check = (m.parts.find((x) => x.type === "data-check") as { data: { valid: number[]; invalid: number[] } } | undefined)?.data;
           const raw = textOf(m);
-          const text = r ? raw.replace(/\[(\d+)\]/g, (s, n) => (Number(n) >= 1 && Number(n) <= r.passages.length ? s : "")) : raw;
+          const text = r ? annotateCitations(raw, r.passages) : raw;
           if (m.role === "user")
             return <div key={m.id} className="ml-auto max-w-[80%] rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">{text}</div>;
           return (
