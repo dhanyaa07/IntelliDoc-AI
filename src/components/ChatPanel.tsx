@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Send, Square, Trash2, Download, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { SourcePassage } from "@/lib/rag/chat.server";
+interface SourcePassage { n: number; docName: string; page: number; content: string; sources: ("dense" | "keyword")[]; confidence: number }
 
 export interface ChatSettings {
   docIds: string[] | null;
