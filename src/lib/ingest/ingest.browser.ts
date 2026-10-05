@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { chunkPages, cleanPageText, findRepeatedLines, LOW_TEXT_THRESHOLD, sha256 } from "./chunking";
-import { extractPdfPages } from "./pdf.client";
+import { extractPdfPages } from "./pdf.browser";
 
 export type IngestResult =
   | { status: "duplicate"; name: string }
