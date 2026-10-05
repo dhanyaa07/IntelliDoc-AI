@@ -136,7 +136,7 @@ function Index() {
             <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Retrieval</h3>
             <div>
               <div className="mb-2 flex justify-between text-sm"><span>Passages (top-k)</span><span className="font-mono">{topK}</span></div>
-              <Slider min={1} max={15} step={1} value={[topK]} onValueChange={([v]) => setTopK(v)} />
+              <Slider min={1} max={15} step={1} value={[topK]} onValueChange={([v]) => setTopK(v ?? 6)} />
             </div>
             <label className="flex items-center justify-between text-sm">Semantic search <Switch checked={dense} onCheckedChange={(v) => (v || keyword) && setDense(v)} /></label>
             <label className="flex items-center justify-between text-sm">Keyword search <Switch checked={keyword} onCheckedChange={(v) => (v || dense) && setKeyword(v)} /></label>
