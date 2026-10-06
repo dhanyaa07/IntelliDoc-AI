@@ -12,3 +12,4 @@
 ## Architecture
 - PDF parsing runs in the browser (pdfjs) and pure chunking logic lives in src/lib/ingest/chunking.ts — keeps server Worker free of heavy deps and logic unit-testable.
 - Chunks are stored per page with content hashes for dedupe; vector + full-text columns live on the same chunks table for hybrid retrieval.
+- Pages that draw images or have almost no text are rendered in the browser and transcribed (tables as markdown) by the AI at upload — tables/scans saved as pictures are otherwise invisible to retrieval.

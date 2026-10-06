@@ -7,4 +7,4 @@
 - [ ] M5 Chat UI with sidebar settings
 - [ ] M6 Evaluation tab (Hit@k, Recall@k, MRR, nDCG, 4-way comparison)
 - [ ] M7/M8 Tests, docs
-- [~] Read tables/figures/scanned pages from page images at upload (e.g. p.49 cloud vs fog table); prefer the passage that directly answers
+- [x] Read tables/figures/scanned pages from page images at upload (e.g. p.49 cloud vs fog table); prefer the passage that directly answers
