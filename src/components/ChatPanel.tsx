@@ -2,6 +2,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Send, Square, Trash2, Download, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -96,8 +97,8 @@ export function ChatPanel({ settings, disabled }: { settings: ChatSettings; disa
             return <div key={m.id} className="ml-auto max-w-[80%] rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">{text}</div>;
           return (
             <div key={m.id} className="max-w-[90%] space-y-3">
-              <div className="prose prose-sm max-w-none text-sm leading-relaxed text-foreground [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5">
-                {text ? <ReactMarkdown>{text}</ReactMarkdown> : <span className="animate-pulse text-muted-foreground">Searching documents…</span>}
+              <div className="prose prose-sm max-w-none overflow-x-auto text-sm leading-relaxed text-foreground [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_table]:my-3 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-border [&_th]:bg-secondary [&_th]:px-2 [&_th]:py-1 [&_th]:text-left">
+                {text ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown> : <span className="animate-pulse text-muted-foreground">Searching documents…</span>}
               </div>
               {check && check.invalid.length > 0 && (
                 <p className="font-mono text-xs text-warning">Removed {check.invalid.length} citation(s) that didn't match a source.</p>
