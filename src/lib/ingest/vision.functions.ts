@@ -13,7 +13,7 @@ export const readPageImage = createServerFn({ method: "POST" })
         "You transcribe document page images exactly. Output ALL readable text on the page verbatim. " +
         "Render every table as a markdown table with the same headers, rows and cell text (no summarizing, no added words). " +
         "For diagrams, list their labels. Never add information that is not visible. If the page has no readable content, output nothing.",
-      messages: [{ role: "user", content: [{ type: "text", text: "Transcribe this page." }, { type: "image", image: data.image }] }],
+      messages: [{ role: "user", content: [{ type: "text", text: "Transcribe this page." }, { type: "image", image: new URL(data.image) }] }],
       providerOptions: LOW_REASONING,
     });
     return { text: (await r.text).trim() };
